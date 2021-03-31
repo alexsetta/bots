@@ -25,26 +25,23 @@ while True:
 	dia =  time.strftime('%Y-%m-%d', time.localtime())
 	hora = time.strftime('%H', time.localtime())
 	print(dia, hora, "Verificando")
-	if (hora < "06" and dia == ultimo):
-		print("Aguardando próxima janela")
-		time.sleep(sleep)
-		continue
+	if (hora >= "06" and dia != ultimo):
+		print(dia, hora, "Enviando")
+		ultimo = dia
+		page = requests.get(url, headers={'User-Agent': 'XYZ/3.0'}).content
+		soup = BeautifulSoup(page, "html.parser")
 
-	print(dia, hora, "Enviando")
-	ultimo = dia
-	page = requests.get(url, headers={'User-Agent': 'XYZ/3.0'}).content
-	soup = BeautifulSoup(page, "html.parser")
-
-	results = soup(id="forecast_wave_size")	
-	rows = results[0].findAll("span")
-	w.size = w.normalize(rows[0].get_text())
+		results = soup(id="forecast_wave_size")	
+		rows = results[0].findAll("span")
+		w.size = w.normalize(rows[0].get_text())
+		
+		results = soup(id="forecast_wave_direction")	
+		w.direction = w.normalize(results[0].get_text())
+		
+		mail.send(['alexsetta@gmail.com'], "Previsão para hoje", w.show())
 	
-	results = soup(id="forecast_wave_direction")	
-	w.direction = w.normalize(results[0].get_text())
-	
-	mail.send(['alexsetta@gmail.com'], "Previsão para hoje", w.show())
+	print("Aguardando próxima janela")
 	time.sleep(sleep)
-
-
+	continue
 
 	
