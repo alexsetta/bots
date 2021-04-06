@@ -21,7 +21,7 @@ class Wave(object):
 
 w = Wave("", "")
 url = "https://www.waves.com.br/surf/ondas/picos/maxim/"
-teste = False
+teste = True
 ultimo = ""
 sleep = 1800
 tz = pytz.timezone('America/Sao_Paulo')
@@ -47,5 +47,7 @@ while True:
 		mail.send(['alexsetta@gmail.com'], "Previsão para hoje", w.show())
 
 	print(now.strftime('%Y-%m-%d %H:%M:%S'), "Aguardando próxima execução")
+	if (teste):
+		exit
 	time.sleep(sleep)
 	continue
