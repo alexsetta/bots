@@ -18,7 +18,7 @@ while True:
     dia = now.strftime('%Y-%m-%d')
     hora = now.strftime('%H')
     print(now.strftime('%Y-%m-%d %H:%M:%S'), "Verificando")
-    if (hora >= "17" and dia != ultimo):
+    if (hora >= "17" and dia != ultimo) or (teste):
         print(now.strftime('%Y-%m-%d %H:%M:%S'), "Enviando")
         ultimo = dia
         page = requests.get(url, headers={'User-Agent': 'XYZ/3.0'}).content
@@ -36,7 +36,8 @@ while True:
                                     fOnda=hOnda, fTemp=hTemp, fPer=hPer, fPot=hPot)
 
         print(previsao)
-        mail.send(['alexsetta@gmail.com'], "Previsão Ondas", previsao)
+        if (not teste):
+            mail.send(['alexsetta@gmail.com'], "Previsão Ondas", previsao)
 
     print(now.strftime('%Y-%m-%d %H:%M:%S'), "Aguardando próxima execução")
     if (teste):
